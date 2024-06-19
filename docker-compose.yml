@@ -9,7 +9,7 @@ services:
       - ./nginx/logs/nginx:/var/log/nginx
       - ./nginx/logrotate.d/nginx-logrotate.conf:/etc/logrotate.d/nginx-logrotate.conf
     ports:
-      - "80:80"
+      - "8081:80"
     depends_on:
       - jewelryauction-backend
 
