@@ -1,0 +1,46 @@
+
+version: '3'
+services:
+  nginx:
+      image: nginx:latest
+      restart: unless-stopped
+      tty: true
+      volumes:
+        - ./nginx.conf:/etc/nginx/conf.d/my-app.conf
+        - ./logs/nginx:/var/log/nginx
+        - ./nginx-logrotate.conf:/etc/logrotate.d/nginx-logrotate.conf
+      ports:
+        - "80:80"
+      depends_on:
+          jewelryauction-backend:
+
+  jewelryauction-backend:
+    image: phuctth/jewelryauction:latest
+    ports:
+      - "8080:8080"
+    environment:
+      MYSQL_HOST: db_jewelryauction
+      MYSQL_PORT: 3306
+      MYSQL_USER: phuctth
+      MYSQL_PASSWORD: SWD392
+      MYSQL_DATABASE: jewelryauction
+    depends_on:
+      - db_jewelryauction
+
+
+  db_jewelryauction:
+    image: mysql:latest
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: SWD392
+      MYSQL_DATABASE: jewelryauction
+      MYSQL_USER: phuctth
+      MYSQL_PASSWORD: SWD392
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
